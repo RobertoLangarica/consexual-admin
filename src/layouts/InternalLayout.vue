@@ -76,26 +76,19 @@
     </q-drawer>
 
     <q-page-container>
-      <HelloWorld />
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
-<script>
-import { ref } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 
-export default {
-  name: 'LayoutDefault',
-
-  components: {
-    HelloWorld
-  },
-
+export default defineComponent({
   setup () {
     return {
       leftDrawerOpen: ref(false)
     }
   }
-}
+})
 </script>
