@@ -19,7 +19,9 @@ module.exports = {
     'vue/no-unused-components':'warn',
     'prefer-const':'warn',
     '@typescript-eslint/interface-name-prefix':'off',
-    'no-unused-vars':'warn'
+    'no-unused-vars':'warn',
+    'symbol-description': 'off',
+    'camelcase':'off'
   },
   overrides: [
     {
