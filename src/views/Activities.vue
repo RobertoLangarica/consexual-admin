@@ -1,5 +1,5 @@
 <template>
-    <main class="column full-height q-pa-xs">
+    <main class="column full-height q-pa-md">
         <div class="row justify-between items-center">
             <h3 class="q-ma-none">Actividades</h3>
             <div>

@@ -36,6 +36,24 @@
             <q-item-label caption>configuración de actividades</q-item-label>
           </q-item-section>
         </q-item>
+        <q-item clickable to="hairs">
+          <q-item-section avatar>
+            <q-icon name="fas fa-hat-cowboy" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Cabellos</q-item-label>
+            <q-item-label caption>Diferentes cabellos para los avatares</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item clickable to="faces">
+          <q-item-section avatar>
+            <q-icon name="fas fa-hat-cowboy" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Caras</q-item-label>
+            <q-item-label caption>Diferentes caras para los avatares</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 

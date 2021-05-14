@@ -21,8 +21,17 @@ export const db = () => firebase.firestore(fApp)
 
 export const storage = () => fApp.storage().ref()
 
+export const uploader = (folder:string) => ({
+  upload: async (file:File) => {
+    return storage()
+      .child(`${folder ? `${folder}/` : ''}${file.name}`)
+      .put(file)
+  }
+})
+
 export default {
   initialize,
   db,
-  storage
+  storage,
+  uploader
 }
