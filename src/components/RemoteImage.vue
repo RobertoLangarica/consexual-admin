@@ -1,5 +1,9 @@
 <template>
-  <q-img class="img" v-if="uri" :src="uri" @load="onLoaded"/>
+  <div class="img-container">
+    <!-- <q-img class="img" v-if="uri" :src="uri" @load="onLoaded"/> -->
+    <img  v-if="uri" :src="uri" @load="onLoaded"/>
+    <q-inner-loading :showing="!ready" color="primary"/>
+  </div>
 </template>
 
 <script lang="ts">
