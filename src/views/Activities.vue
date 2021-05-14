@@ -7,19 +7,23 @@
             </div>
         </div>
         <div class="col" style="overflow-y: auto;">
-            <q-card class="q-ma-md row q-col-gutter-x-sm items-center" v-for="(item, index) in activities" :key="item.id">
-                <div>
-                    <q-btn class="grab" size="sm" icon="fas fa-grip-vertical" color="grey-5" flat round />
-                </div>
-                <q-card-section class="col row">
-                    <span class="col-12 text-h6">{{item.id}}</span>
-                    <span class="col-12 text-grey">{{item.type}}</span>
-                </q-card-section>
-                <q-card-section class="row q-col-gutter-x-md">
-                    <div><q-btn icon="fas fa-edit" size="sm" color="primary" flat round @click="edit(item)"/></div>
-                    <div><q-btn icon="fas fa-trash" size="sm" color="negative" flat round @click="remove(item, index)"/></div>
-                </q-card-section>
-            </q-card>
+            <draggable v-model="sorted" @end="onDragEnd" item-key="id">
+              <template #item="{element, index}">
+                <q-card class="q-ma-md row q-col-gutter-x-sm items-center" >
+                  <div>
+                      <q-btn class="grab" size="sm" icon="fas fa-grip-vertical" color="grey-5" flat round />
+                  </div>
+                  <q-card-section class="col row">
+                      <span class="col-12 text-h6">{{element.id}}</span>
+                      <span class="col-12 text-grey">{{element.type}}</span>
+                  </q-card-section>
+                  <q-card-section class="row q-col-gutter-x-md">
+                      <div><q-btn icon="fas fa-edit" size="sm" color="primary" flat round @click="edit(element)"/></div>
+                      <div><q-btn icon="fas fa-trash" size="sm" color="negative" flat round @click="remove(element, index)"/></div>
+                  </q-card-section>
+              </q-card>
+              </template>
+            </draggable>
         </div>
         <div>
             <q-btn class="full-width" label="Guardar cambios" color="teal"/>
@@ -33,14 +37,20 @@
 <script lang="ts">
 import { useActivities } from '@/store'
 import ActivityDialog from '@/components/ActivityDialog.vue'
-
-import { defineComponent, ref } from 'vue'
+import draggable from 'vuedraggable'
+import { defineComponent, ref, watch } from 'vue'
 import { Notify, useQuasar } from 'quasar'
 
 export default defineComponent({
-  components: { ActivityDialog },
+  components: { ActivityDialog, draggable },
   setup () {
     const { sorted: activities, edit: editActivity, remove: removeActivity } = useActivities()
+    // For a smooth response to a sorting action
+    const sorted = ref<any[]>([])
+    watch(activities, (changed) => {
+      sorted.value = activities.value
+    })
+
     const editing = ref(false)
     const activity = ref(undefined)
     const $q = useQuasar()
@@ -75,7 +85,31 @@ export default defineComponent({
         })
     }
 
-    return { activities, editing, activity, edit, create, remove, loading }
+    // Sorting after a drag
+    const onDragEnd = ({ oldIndex, newIndex }) => {
+      if (oldIndex === newIndex) { return }
+      const prev = oldIndex - 1
+      const current = activities.value[oldIndex]
+
+      if (prev >= 0) {
+        editActivity({ id: activities.value[prev].id, next: current.next })
+      }
+
+      if (newIndex > oldIndex) {
+        // Moving down
+        editActivity({ id: current.id, next: activities.value[newIndex].next })
+        editActivity({ id: activities.value[newIndex].id, next: current.id })
+      } else {
+        // Moving up
+        const prev = newIndex - 1
+        editActivity({ id: current.id, next: activities.value[newIndex].id })
+        if (prev >= 0) {
+          editActivity({ id: activities.value[prev].id, next: current.id })
+        }
+      }
+    }
+
+    return { sorted, editing, activity, edit, create, remove, loading, onDragEnd }
   }
 })
 </script>
