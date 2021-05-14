@@ -5,11 +5,12 @@ import activities from './activities/activities'
 export interface IGlobalState {
     activities: IBasicCollection;
     hairs: IBasicCollection;
+    faces: IBasicCollection;
 }
 
 const store = createStore<IGlobalState>({
   modules: {
-    activities, hairs: basicCollection('hairs')
+    activities, hairs: basicCollection('hairs'), faces: basicCollection('faces')
   },
   actions: {
     init ({ dispatch }) {
